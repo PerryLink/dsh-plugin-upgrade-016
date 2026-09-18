@@ -1,0 +1,132 @@
+{
+  "name": "@perrylink/dsh-plugin-upgrade-016",
+  "version": "0.1.0",
+  "description": "Plugin-author upgrade skill for DeepSeek Harness: the closed 0.1.5-rc.2 -> 0.1.6-alpha.2 corridor card plus a zero-dependency seam scanner over one five-seam catalog - E1 (agent/created listener throwing blocks creation), E2 (async apply race: registration after the first await), E3 (removed slot keys settings.plugin.item and SessionListState.current), E4 (removed client APIs sessions.open/openSubagent/clear) and E5 (removed model literals deepseek-v4-flash*/deepseek-v4-vision-exp) - packaged as a bundle skill and an npx CLI.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PerryLink/dsh-plugin-upgrade-016.git"
+  },
+  "homepage": "https://github.com/PerryLink/dsh-plugin-upgrade-016#readme",
+  "bugs": {
+    "url": "https://github.com/PerryLink/dsh-plugin-upgrade-016/issues"
+  },
+  "author": "PerryLink",
+  "private": false,
+  "type": "module",
+  "main": "./index.mjs",
+  "types": "./types.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types.d.ts",
+      "default": "./index.mjs"
+    },
+    "./scan": {
+      "types": "./types.d.ts",
+      "default": "./lib/scan-0.1.6.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "dsh-plugin-upgrade-016-scan": "./scripts/scan-0.1.6.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "types.d.ts",
+    "lib",
+    "scripts",
+    "skills",
+    "docs",
+    "cordis.patch.yml",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "AGENTS.md",
+    "THIRD_PARTY_NOTICES.md",
+    "README.md",
+    "README-zh.md",
+    "README-es.md",
+    "README-pt.md",
+    "README-hi.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dshWorkshop": {
+    "schema": "omdsh-workshop-package/v1",
+    "type": "plugin",
+    "integration": {
+      "protocol": "harness-profile",
+      "artifact": "cordis.patch.yml"
+    },
+    "install": {
+      "mode": "transactional",
+      "adapter": "profile-bundle",
+      "failurePolicy": "generation-rollback",
+      "touchesCurrentBeforeActivation": false
+    },
+    "lifecycle": {
+      "activation": "restart-profile",
+      "dispose": "supported"
+    },
+    "permissions": [
+      "filesystem:read"
+    ],
+    "capability": {
+      "id": "plugin-upgrade-016",
+      "kind": "service",
+      "invocation": "ctx.skills.get('plugin-upgrade-016') resolves a complete SkillDefinition",
+      "expected": "the session skill catalog lists plugin-upgrade-016 and the loaded body carries the closed 0.1.5-rc.2 -> 0.1.6-alpha.2 corridor card with a directory resourceBase"
+    },
+    "evidence": {
+      "install": null,
+      "failureIsolation": null,
+      "hotReload": null,
+      "remove": null
+    }
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "deepseek",
+    "cordis",
+    "plugin-upgrade",
+    "migration",
+    "skill",
+    "version-card",
+    "scanner",
+    "client-slots"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0",
+    "dsh": ">=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0 || >=0.1.6-0 <0.2.0"
+  },
+  "packageManager": "pnpm@11.7.0",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-skill": ">=0.1.2-rc.1 <0.2.0 || >=0.1.5-alpha.1 <0.2.0 || >=0.1.6-0 <0.2.0",
+    "@deepseek-ai/schemastery": "^3.18.2"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-skill": "0.1.6-alpha.2",
+    "@deepseek-ai/schemastery": "^3.18.2"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "scan": "node scripts/scan-0.1.6.mjs",
+    "check:readmes": "node scripts/check-readme-sync.mjs",
+    "verify:self-contained": "node scripts/verify-self-contained.mjs",
+    "verify:artifacts": "node scripts/verify-artifacts.mjs",
+    "verify": "npm test && node scripts/check-readme-sync.mjs && node scripts/verify-self-contained.mjs && node scripts/verify-artifacts.mjs"
+  },
+  "license": "Apache-2.0",
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/PerryLink"
+  }
+}

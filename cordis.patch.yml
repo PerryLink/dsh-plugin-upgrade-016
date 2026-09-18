@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: Apache-2.0
+# dsh-plugin-upgrade-016 bundle patch layer.
+#
+# A loader patch file is a top-level YAML array; each entry inserts (or removes)
+# composition rows. This bundle mounts one row and registers one bundled agent
+# skill (`plugin-upgrade-016`) through the `skills` service. It contributes no
+# system-prompt paragraph and no tool: the model sees the skill only when a task
+# needs it, and the CLI (`dsh-plugin-upgrade-016-scan`) stays an explicit
+# developer action. Every key below is a Config field (Schemastery schema);
+# invalid values fail the profile load loudly. See README.md "Configuration".
+- insert:
+    - id: dsh-plugin-upgrade-016
+      name: dsh-plugin-upgrade-016
+      config:
+        # Register the packaged skill. Default true.
+        enabled: true
+        # Skill name published to the model catalog. Default 'plugin-upgrade-016'.
+        skillName: plugin-upgrade-016
+        # Skill root inside the package; must contain <skillName>/SKILL.md.
+        # Default: the package's own ./skills directory.
+        # skillsRoot: /absolute/path/to/skills
+        # Mark the skill user-invocable in addition to model-invocable. Default true.
+        userInvocable: true

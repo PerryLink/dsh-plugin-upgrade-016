@@ -1,0 +1,14 @@
+# Nearest-workspace root for this standalone plugin package. This file makes
+# dsh-plugin-upgrade-016 an independent workspace when the repository is
+# checked out inside another pnpm workspace, such as the family plugin tree.
+packages:
+  - .
+minimumReleaseAgeExclude:
+  - '@deepseek-ai/cordis@4.0.2'
+  - '@deepseek-ai/schemastery@3.18.2'
+  - '@deepseek-ai/dsh-skill@0.1.6-alpha.2'
+# pnpm 11 enables minimumReleaseAge (1440 minutes) by default; the fresh
+# 0.1.6-alpha.2 pins would otherwise keep a fresh install red for 24h after the
+# harness release. minimumReleaseAge: 0 disables the gate for this workspace.
+minimumReleaseAge: 0
+verifyDepsBeforeRun: false
