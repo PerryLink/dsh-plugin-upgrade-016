@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Gate
+        run: |
+          pnpm test
+          pnpm run check:readmes
+          pnpm run verify:self-contained
+          pnpm run verify:artifacts
+
+      - name: Verify the changelog names this version
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          grep -q "## \[${VERSION}\]" CHANGELOG.md || { echo "CHANGELOG.md has no '## [${VERSION}]' section"; exit 1; }
+
+      - name: Publish to npm
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          # The family publish step writes the token into the userconfig itself
+          # instead of relying on setup-node's env expansion (the retired
+          # package's first tag died on that path with a header-value error).
+          raw_breaks="no"
+          case "$NPM_TOKEN" in *$'\n'*|*$'\r'*) raw_breaks="yes" ;; esac
+          token="$(printf '%s' "$NPM_TOKEN" | tr -d '\r\n')"
+          echo "NPM_TOKEN secret contains line breaks: ${raw_breaks}"
+          if [ -z "$token" ]; then
+            echo "NPM_TOKEN secret is not set; skipping npm publish"
+            exit 0
+          fi
+          if npm view "@perrylink/dsh-plugin-upgrade-016@${version}" version >/dev/null 2>&1; then
+            echo "@perrylink/dsh-plugin-upgrade-016@${version} is already published; skipping npm publish"
+          else
+            printf '//registry.npmjs.org/:_authToken=%s\n' "$token" > "${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+            npm publish --provenance --access public
+          fi
+
+  release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ github.ref_name }}" >/dev/null 2>&1; then
+            echo "release ${{ github.ref_name }} already exists; skipping"
+            exit 0
+          fi
+          VERSION="${GITHUB_REF_NAME#v}"
+          node scripts/changelog-section.mjs "$VERSION" > release-notes.md
+          if [ -s release-notes.md ]; then
+            gh release create "${{ github.ref_name }}" \
+              --title "${{ github.ref_name }}" \
+              --notes-file release-notes.md
+          else
+            gh release create "${{ github.ref_name }}" --generate-notes
+          fi
