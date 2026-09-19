@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
+### Changed
+
+- Before the first release the package name moved from the scoped `@perrylink/dsh-plugin-upgrade-016` to the unscoped **`dsh-plugin-upgrade-016`** (the family's corridor packages are unscoped, and the unscoped name was free), and the release workflow publishes through **npm trusted publishing (OIDC)** instead of a stored `NPM_TOKEN`.
+
+## [0.1.0] - 2026-09-19
+
 ### Added
 
 - New closed-corridor package for the DSH hop `0.1.5-rc.2 -> 0.1.6-alpha.2` (a corridor never widens: this span is a new package, not a wider card).

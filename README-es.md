@@ -24,7 +24,7 @@ Un escaneo limpio es **necesario, no suficiente**: la rotura de este corredor es
 ## Quick start
 
 ```sh
-dsh plugin --profile web add @perrylink/dsh-plugin-upgrade-016
+dsh plugin --profile web add dsh-plugin-upgrade-016
 npx dsh-plugin-upgrade-016-scan --repo <your-plugin-repo>
 ```
 

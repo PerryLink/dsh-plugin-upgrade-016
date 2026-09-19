@@ -44,7 +44,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/bare" && cd "$RUNNER_TEMP/bare"
           pnpm init >/dev/null
           pnpm add "$TARBALL" >/dev/null
-          node --input-type=module -e "import('@perrylink/dsh-plugin-upgrade-016').then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)})"
+          node --input-type=module -e "import('dsh-plugin-upgrade-016').then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)})"
   profile:
     runs-on: ubuntu-latest
     steps:

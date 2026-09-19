@@ -24,7 +24,7 @@ Um escaneamento limpo é **necessário, não suficiente**: a quebra deste corred
 ## Quick start
 
 ```sh
-dsh plugin --profile web add @perrylink/dsh-plugin-upgrade-016
+dsh plugin --profile web add dsh-plugin-upgrade-016
 npx dsh-plugin-upgrade-016-scan --repo <your-plugin-repo>
 ```
 

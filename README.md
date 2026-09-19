@@ -24,7 +24,7 @@ A clean scan is **necessary, not sufficient**: the breakage this corridor covers
 ## Quick start
 
 ```sh
-dsh plugin --profile web add @perrylink/dsh-plugin-upgrade-016
+dsh plugin --profile web add dsh-plugin-upgrade-016
 npx dsh-plugin-upgrade-016-scan --repo <your-plugin-repo>
 ```
 
