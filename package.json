@@ -1,5 +1,5 @@
 {
-  "name": "@perrylink/dsh-plugin-upgrade-016",
+  "name": "dsh-plugin-upgrade-016",
   "version": "0.1.0",
   "description": "Plugin-author upgrade skill for DeepSeek Harness: the closed 0.1.5-rc.2 -> 0.1.6-alpha.2 corridor card plus a zero-dependency seam scanner over one five-seam catalog - E1 (agent/created listener throwing blocks creation), E2 (async apply race: registration after the first await), E3 (removed slot keys settings.plugin.item and SessionListState.current), E4 (removed client APIs sessions.open/openSubagent/clear) and E5 (removed model literals deepseek-v4-flash*/deepseek-v4-vision-exp) - packaged as a bundle skill and an npx CLI.",
   "repository": {

@@ -40,11 +40,11 @@ jobs:
       - name: Bare install + import smoke
         run: |
           set -euo pipefail
-          TARBALL="$(ls "$RUNNER_TEMP"/perrylink-dsh-plugin-upgrade-016-*.tgz | head -n1)"
+          TARBALL="$(ls "$RUNNER_TEMP"/dsh-plugin-upgrade-016-*.tgz | head -n1)"
           mkdir -p "$RUNNER_TEMP/bare" && cd "$RUNNER_TEMP/bare"
           pnpm init >/dev/null
           pnpm add "$TARBALL" >/dev/null
-          node --input-type=module -e "import('@perrylink/dsh-plugin-upgrade-016').then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)})"
+          node --input-type=module -e "import('dsh-plugin-upgrade-016').then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1)})"
   profile:
     runs-on: ubuntu-latest
     steps:
@@ -69,7 +69,7 @@ jobs:
       - name: Install into a scratch profile (builds allowlisted)
         run: |
           set -euo pipefail
-          TARBALL="$(ls "$RUNNER_TEMP"/perrylink-dsh-plugin-upgrade-016-*.tgz | head -n1)"
+          TARBALL="$(ls "$RUNNER_TEMP"/dsh-plugin-upgrade-016-*.tgz | head -n1)"
           export DSH_HOME="$RUNNER_TEMP/dsh-home"
           mkdir -p "$DSH_HOME/profiles/compat"
           cat > "$DSH_HOME/profiles/compat/pnpm-workspace.yaml" <<'YAML'
