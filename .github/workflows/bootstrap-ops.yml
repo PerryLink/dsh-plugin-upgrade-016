@@ -1,0 +1,69 @@
+name: bootstrap-ops
+
+# One-off operations that a fresh package cannot do through OIDC yet, plus the
+# retirement of the superseded package name. Both share one npm token that is
+# added as the repo secret NPM_TOKEN only for this round and deleted - together
+# with this workflow - as soon as they have run.
+#
+# Why this exists:
+#   * `dsh-plugin-upgrade-016` has never been published, and npm only exposes a
+#     package's trusted-publisher settings page AFTER the first publish, so
+#     version 0.1.0 has to go out through a token. Every later release uses
+#     release.yml (trusted publishing, no secret).
+#   * the retired `dsh-plugin-upgrade` still carries a dead repository link (its
+#     GitHub repository no longer exists). `npm deprecate` is not an OIDC
+#     operation - it needs the token.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'publish = first publish of this package; deprecate = retire the old package name'
+        required: true
+        type: choice
+        options: [publish, deprecate]
+
+permissions:
+  contents: read
+  id-token: write # provenance attestation for the bootstrap publish
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Require the one-off token (never skip silently)
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${NPM_TOKEN:-}" ]; then
+            echo "::error::the NPM_TOKEN secret is not set in this repository; add the one-off bootstrap token before dispatching"
+            exit 1
+          fi
+          printf '//registry.npmjs.org/:_authToken=%s\n' "$(printf '%s' "$NPM_TOKEN" | tr -d '\r\n')" > "${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+          echo "registry userconfig written"
+
+      - name: Publish the bootstrap version
+        if: inputs.mode == 'publish'
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./package.json').version")"
+          if npm view "dsh-plugin-upgrade-016@${version}" version >/dev/null 2>&1; then
+            echo "dsh-plugin-upgrade-016@${version} is already published; nothing to do"
+            exit 0
+          fi
+          npm publish --provenance --access public
+          echo "published dsh-plugin-upgrade-016@${version} through the one-off token"
+
+      - name: Retire the superseded package name
+        if: inputs.mode == 'deprecate'
+        run: |
+          set -euo pipefail
+          npm deprecate "dsh-plugin-upgrade@*" "Retired: this corridor was merged into dsh-plugin-upgrade-015, and the current corridor lives in dsh-plugin-upgrade-016. Install dsh-plugin-upgrade-016 instead."
+          echo "deprecated dsh-plugin-upgrade; registry now reports:"
+          curl -fsS "https://registry.npmjs.org/dsh-plugin-upgrade" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const j=JSON.parse(s);console.log("  latest="+j["dist-tags"].latest+" deprecated="+JSON.stringify(j.versions[j["dist-tags"].latest].deprecated))})'
