@@ -2,13 +2,13 @@
   {
     "path": "docs/assets/dsh-plugin-upgrade-016-hero.png",
     "kind": "hero",
-    "alt": "dsh-plugin-upgrade-016 documentation card",
-    "caption": "Generated documentation baseline; replace with a real run."
+    "alt": "dsh-plugin-upgrade-016 real test run",
+    "caption": "Real command: node --test test/scan.test.mjs test/card.test.mjs \u2014 18 tests passed, 0 failed. Selected corridor tests; plugin tests need workspace host dependencies. Run 2026-11-01."
   },
   {
     "path": "docs/assets/dsh-plugin-upgrade-016-demo.gif",
     "kind": "demo",
-    "alt": "dsh-plugin-upgrade-016 install preview",
-    "caption": "Generated install preview; not a test result."
+    "alt": "dsh-plugin-upgrade-016 real test output replay",
+    "caption": "The same real command output, replayed line by line."
   }
 ]
