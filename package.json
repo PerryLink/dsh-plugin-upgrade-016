@@ -51,7 +51,9 @@
     "icon.svg",
     "screenshots.json",
     "docs/assets/dsh-plugin-upgrade-016-demo.gif",
-    "docs/assets/dsh-plugin-upgrade-016-hero.png"
+    "docs/assets/dsh-plugin-upgrade-016-hero.png",
+    "CONTRIBUTING.md",
+    "docs/assets/dsh-plugin-upgrade-016-flow.svg"
   ],
   "sideEffects": false,
   "dsh": {
