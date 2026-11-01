@@ -46,7 +46,12 @@
     "README-es.md",
     "README-pt.md",
     "README-hi.md",
-    "LICENSE"
+    "LICENSE",
+    "PRIVACY.md",
+    "icon.svg",
+    "screenshots.json",
+    "docs/assets/dsh-plugin-upgrade-016-demo.gif",
+    "docs/assets/dsh-plugin-upgrade-016-hero.png"
   ],
   "sideEffects": false,
   "dsh": {
@@ -128,5 +133,6 @@
   "funding": {
     "type": "individual",
     "url": "https://github.com/sponsors/PerryLink"
-  }
+  },
+  "icon": "icon.svg"
 }
